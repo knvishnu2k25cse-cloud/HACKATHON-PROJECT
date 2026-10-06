@@ -1,0 +1,122 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║   🏛️  CITIZEN GRIEVANCE & GOVERNMENT ORDER AUTO-ROUTING SYSTEM           ║
+║                                                                            ║
+║   Smart Cities Hackathon Demo - Quick Start Guide                         ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📋 STEP 1: Configure OpenAI API Key (REQUIRED for AI features)
+────────────────────────────────────────────────────────────────────────────
+Edit:  backend/.env
+Add:   OPENAI_API_KEY=sk-your-actual-openai-key-here
+
+ℹ️  Without a valid key, the system will use keyword-based fallback
+   (still functional for demo, but less accurate)
+
+
+🚀 STEP 2: Start the Application
+────────────────────────────────────────────────────────────────────────────
+Run:   ./start.sh
+
+OR manually in two terminals:
+
+  Terminal 1:  cd backend && node server.js
+  Terminal 2:  cd frontend && REACT_APP_API_URL=http://localhost:3001 npm start
+
+
+🌐 STEP 3: Access the Application
+────────────────────────────────────────────────────────────────────────────
+Frontend:  http://localhost:3000
+Backend:   http://localhost:3001
+
+
+📝 DEMO WALKTHROUGH
+────────────────────────────────────────────────────────────────────────────
+1. HOME PAGE → Overview and navigation
+
+2. FILE COMPLAINT (Citizen Flow):
+   • Aadhaar: 123456789012 (any 12 digits)
+   • OTP will be shown on screen (demo mode)
+   • Fill complaint form → AI analyzes and routes
+   • Note your Complaint ID for tracking
+
+3. TRACK STATUS:
+   • Try sample IDs: GRV-2025-001, GRV-2025-008
+   • See department routing and resolution status
+
+4. DEPARTMENT DASHBOARD:
+   • Select any department (e.g., Water Supply, Health)
+   • View routed issues
+   • Mark issues as resolved with notes
+
+5. COLLECTOR DASHBOARD:
+   • Overview of all departments
+   • High-priority alerts highlighted in red
+   • Real-time stats and resolution tracking
+
+6. COLLECTOR ORDERS:
+   • Paste order text OR upload scanned image/PDF
+   • OCR extracts text automatically
+   • AI splits multi-department directives
+
+
+📊 PRE-SEEDED SAMPLE DATA (10 complaints, 22 issues)
+────────────────────────────────────────────────────────────────────────────
+GRV-2025-001  Water supply outage (High priority)
+GRV-2025-002  Roads + Electricity (Multi-department split)
+GRV-2025-003  Collector order (3 departments)
+GRV-2025-004  Garbage collection + Health hazard
+GRV-2025-005  Building collapse risk (High priority)
+GRV-2025-006  Land encroachment survey (Collector order)
+GRV-2025-007  School infrastructure (3 departments)
+GRV-2025-008  FLOOD EMERGENCY (4 departments, High priority) ⚠️
+GRV-2025-009  Mid-day meal inspection (Collector order)
+GRV-2025-010  Industrial contamination (3 departments, High priority) ⚠️
+
+
+🤖 AI CLASSIFICATION FEATURES
+────────────────────────────────────────────────────────────────────────────
+✓ Multi-department detection and auto-splitting
+✓ Urgency keyword detection (flood, fire, collapse, emergency, etc.)
+✓ Auto-mark High Priority if:
+  • Urgency keywords found OR
+  • 3+ departments involved
+✓ Deadline extraction from text
+✓ Department routing to 8 categories:
+  - Water Supply
+  - Roads & Infrastructure  
+  - Electricity
+  - Sanitation
+  - Health
+  - Education
+  - Revenue/Land Records
+  - General Administration
+
+
+🛑 STOPPING THE APPLICATION
+────────────────────────────────────────────────────────────────────────────
+Press Ctrl+C in the terminal running ./start.sh
+
+OR manually kill processes:
+  pkill -f "node server.js"
+  pkill -f "react-scripts"
+
+
+💡 TIPS FOR DEMO
+────────────────────────────────────────────────────────────────────────────
+• Start with GRV-2025-008 (flood emergency) to show high-priority routing
+• Submit a new complaint mentioning multiple issues to demo AI splitting
+• Use Department Dashboard to show real-time resolution workflow
+• Upload a text file as "scanned order" to demo OCR (faster than image)
+• Show Collector Dashboard last for full system overview
+
+
+📧 TECH STACK
+────────────────────────────────────────────────────────────────────────────
+Frontend:  React 18 + Tailwind CSS + React Router
+Backend:   Node.js + Express + SQLite
+AI:        OpenAI GPT-3.5-turbo (with keyword fallback)
+OCR:       Tesseract.js
+
+════════════════════════════════════════════════════════════════════════════

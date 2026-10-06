@@ -1,0 +1,136 @@
+grievance-system/
+├── README.md                          # Main documentation
+├── SETUP.md                           # Detailed setup guide
+├── QUICK-START.txt                    # Quick reference card
+├── PROJECT-STRUCTURE.txt              # This file
+├── start.sh                           # Automated startup script
+│
+├── backend/                           # Node.js/Express Backend
+│   ├── .env                           # Environment config (API keys)
+│   ├── package.json                   # Backend dependencies
+│   ├── server.js                      # Main Express server
+│   ├── db.js                          # SQLite database setup + seed data
+│   ├── ai.js                          # OpenAI integration + fallback
+│   ├── test-setup.js                  # Backend verification script
+│   ├── uploads/                       # Uploaded files (auto-created)
+│   └── grievance.db                   # SQLite database (auto-created)
+│
+└── frontend/                          # React Frontend
+    ├── package.json                   # Frontend dependencies
+    ├── tailwind.config.js             # Tailwind CSS config
+    ├── postcss.config.js              # PostCSS config
+    ├── public/
+    │   └── index.html                 # HTML template
+    └── src/
+        ├── index.js                   # React entry point
+        ├── index.css                  # Global styles (Tailwind)
+        ├── App.js                     # Main app with routing
+        ├── api.js                     # Axios API client
+        │
+        ├── components/                # Reusable components
+        │   ├── Spinner.jsx            # Loading spinner
+        │   ├── PriorityBadge.jsx      # High/Normal badge
+        │   ├── StatusBadge.jsx        # Pending/Resolved badge
+        │   └── IssueCard.jsx          # Issue display card
+        │
+        └── pages/                     # Page components
+            ├── Home.jsx               # Landing page
+            ├── CitizenComplaint.jsx   # Citizen complaint form
+            ├── CollectorOrder.jsx     # Collector order input
+            ├── DepartmentDashboard.jsx # Department view
+            ├── CollectorDashboard.jsx  # Collector overview
+            └── StatusTracker.jsx      # Track complaint status
+
+
+📊 DATABASE SCHEMA
+══════════════════════════════════════════════════════════════════════════
+
+complaints
+  ├── id (TEXT, PRIMARY KEY)           e.g., GRV-2025-001
+  ├── source (TEXT)                    'citizen' | 'collector_order'
+  ├── citizen_name (TEXT)
+  ├── citizen_location (TEXT)
+  ├── original_text (TEXT)             Full complaint/order text
+  ├── aadhaar_hash (TEXT)              Masked Aadhaar (1234****5678)
+  └── created_at (DATETIME)
+
+issues
+  ├── id (INTEGER, PRIMARY KEY AUTOINCREMENT)
+  ├── complaint_id (TEXT, FOREIGN KEY) → complaints.id
+  ├── department (TEXT)                One of 8 departments
+  ├── issue_text (TEXT)                Specific issue for this dept
+  ├── deadline (TEXT)                  Extracted deadline
+  ├── priority (TEXT)                  'High' | 'Normal'
+  ├── status (TEXT)                    'Pending' | 'Resolved'
+  ├── resolution_note (TEXT)
+  ├── resolved_at (DATETIME)
+  └── created_at (DATETIME)
+
+otp_store
+  ├── aadhaar (TEXT, PRIMARY KEY)
+  ├── otp (TEXT)
+  ├── created_at (DATETIME)
+  └── verified (INTEGER)               0 | 1
+
+
+🔌 API ENDPOINTS
+══════════════════════════════════════════════════════════════════════════
+
+OTP & Authentication:
+  POST   /api/otp/send                 Send OTP to Aadhaar
+  POST   /api/otp/verify               Verify OTP
+
+Complaints:
+  POST   /api/complaints/submit        Submit citizen complaint
+  GET    /api/status/:complaintId      Track complaint status
+
+Collector Orders:
+  POST   /api/collector/submit-text    Submit order as text
+  POST   /api/collector/upload         Upload & OCR document
+
+Dashboards:
+  GET    /api/departments              List all departments + stats
+  GET    /api/dashboard/department/:dept  Get issues for department
+  GET    /api/dashboard/collector      Get all issues + stats
+  POST   /api/issues/:id/resolve       Mark issue as resolved
+
+
+🎯 KEY FEATURES IMPLEMENTED
+══════════════════════════════════════════════════════════════════════════
+✓ Simulated Aadhaar OTP verification (demo mode shows OTP on screen)
+✓ AI-powered text analysis using OpenAI GPT-3.5-turbo
+✓ Keyword-based fallback classifier (works without API key)
+✓ Multi-department issue detection and auto-splitting
+✓ Urgency detection (flood, fire, collapse, emergency, etc.)
+✓ Auto-prioritization (High if urgent keywords OR 3+ departments)
+✓ OCR support via Tesseract.js (images + PDFs)
+✓ 8 department categories
+✓ Department-specific dashboards with resolve action
+✓ Collector overview dashboard with high-priority alerts
+✓ Real-time complaint status tracking
+✓ Pre-seeded with 10 diverse sample complaints
+✓ Mobile-responsive Tailwind CSS UI
+✓ Complete CRUD operations
+✓ Error handling and validation
+
+
+📦 DEPENDENCIES
+══════════════════════════════════════════════════════════════════════════
+
+Backend:
+  • express              Web framework
+  • cors                 CORS middleware
+  • better-sqlite3       SQLite database
+  • multer               File uploads
+  • openai               OpenAI API client
+  • tesseract.js         OCR engine
+  • uuid                 ID generation
+  • dotenv               Environment variables
+
+Frontend:
+  • react                UI framework
+  • react-dom            React DOM renderer
+  • react-router-dom     Client-side routing
+  • axios                HTTP client
+  • tailwindcss          Utility-first CSS
+  • react-scripts        CRA build tools

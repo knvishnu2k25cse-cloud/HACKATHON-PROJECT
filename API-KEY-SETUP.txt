@@ -1,0 +1,135 @@
+.
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                     🔑 OpenAI API Key Setup Guide                         ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+📝 STEP 1: Get Your OpenAI API Key
+────────────────────────────────────────────────────────────────────────────
+
+1. Go to: https://platform.openai.com/api-keys
+2. Sign in or create an account
+3. Click "Create new secret key"
+4. Copy the key (starts with sk-proj- or sk-)
+5. IMPORTANT: Save it somewhere safe (you can only see it once!)
+
+
+🔧 STEP 2: Add Key to Your Project
+────────────────────────────────────────────────────────────────────────────
+
+File to edit: backend/.env
+
+Replace this line:
+  OPENAI_API_KEY=your_openai_api_key_here
+
+With your actual key:
+  OPENAI_API_KEY=sk-proj-abc123xyz...
+
+
+Full file should look like:
+┌────────────────────────────────────────────────────────────────────────┐
+│ PORT=3001                                                              │
+│ OPENAI_API_KEY=sk-proj-your-actual-key-here                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+🚀 STEP 3: Restart Backend Server
+────────────────────────────────────────────────────────────────────────────
+
+If backend is running, stop it (Ctrl+C), then restart:
+
+  cd backend
+  node server.js
+
+You should see:
+  🚀 Grievance System Backend running on http://localhost:3001
+
+No more "Invalid API key" errors!
+
+
+✅ STEP 4: Verify It's Working
+────────────────────────────────────────────────────────────────────────────
+
+Run the test script:
+
+  cd backend
+  node test-openai.js
+
+Look for:
+  ✓ OpenAI API key found
+  ✅ OpenAI classification successful
+
+OR test in the web app:
+
+1. Open: http://localhost:3000/citizen
+2. Submit a multi-department complaint
+3. Check backend console for:
+   ✅ OpenAI classification successful
+
+
+🔒 Security Notes
+────────────────────────────────────────────────────────────────────────────
+
+✓ Your API key is stored ONLY in backend/.env (server-side)
+✓ It's NEVER sent to the browser or frontend
+✓ It's NEVER committed to git (blocked by .gitignore)
+✓ It's NEVER exposed in HTTP responses
+
+⚠️ DO NOT:
+  × Share your API key publicly
+  × Commit backend/.env to git
+  × Put the key in frontend code
+  × Share screenshots showing the key
+
+
+💰 Cost Information
+────────────────────────────────────────────────────────────────────────────
+
+Model: gpt-3.5-turbo (fast and affordable)
+Cost: ~$0.0003 per complaint classification
+
+For testing:
+  100 complaints  ≈ $0.03
+  1000 complaints ≈ $0.30
+
+Very affordable for demos and hackathons!
+
+
+🐛 Troubleshooting
+────────────────────────────────────────────────────────────────────────────
+
+Problem: "Invalid API key" error
+  → Check backend/.env file
+  → Make sure key starts with sk-
+  → No spaces around the = sign
+  → Restart backend server
+
+Problem: Still using fallback classifier
+  → Run: cd backend && node -e "require('dotenv').config(); console.log(process.env.OPENAI_API_KEY);"
+  → If it shows "your_openai_api_key_here", you need to replace it
+  → If it shows "undefined", .env file might be missing or in wrong location
+
+Problem: Rate limit exceeded
+  → You've hit OpenAI's free tier limit
+  → System automatically uses fallback (still works!)
+  → Wait or upgrade your OpenAI plan
+
+
+📚 More Information
+────────────────────────────────────────────────────────────────────────────
+
+Detailed guide:     OPENAI-INTEGRATION.md
+Integration summary: INTEGRATION-SUMMARY.md
+Quick start:        QUICK-START.txt
+
+
+════════════════════════════════════════════════════════════════════════════
+
+              Your system works perfectly with OR without OpenAI!
+              
+              Without key: Uses smart keyword-based fallback
+              With key:    Uses GPT-3.5 for intelligent classification
+
+════════════════════════════════════════════════════════════════════════════
